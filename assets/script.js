@@ -30,22 +30,26 @@ function fetchWeatherData(city) {
 }
 
 // Fetches 5 day forecast data from OpenWeather API
-function fetchForecastData(weatherData) {
-    const apiUrl = 'https://api.openweathermap.org/data/2.5/forecast?q=' + city + '&appid=a2986e392fb8f98a746af14b93d91f5a';
-    fetch(apiUrl)
-        .then(function (response) {
-            if (!response.ok) {
-                throw response.json('No weather data found');
+function fetchForecastData(city) {
+    const forecastApiUrl = 'https://api.openweathermap.org/data/2.5/forecast?q='+city+'&appid=a2986e392fb8f98a746af14b93d91f5a';
+    fetch(forecastApiUrl)
+        .then(function (futureResponse) {
+            if (!futureResponse.ok) {
+                throw futureResponse.json('No weather data found');
             }
-            return response.json();
+            return futureResponse.json();
         })
-        .then(function (data) {
-            displayFiveDayForecast(data);
+        .then(function (futureData) {
+            displayFiveDayForecast(futureData);
         })
         .catch(function (error) {
+            console.log(error);
             alert('Unable to connect to OpenWeather');
         });
 }
+
+
+
 
 
 // Display current weather data
@@ -59,6 +63,39 @@ function displayCurrentWeather(weatherData) {
 
 
 // Display 5 day forecast data
+function displayFiveDayForecast(forecastData) {
+    console.log(forecastData);
+    forecastColumns.innerHTML = '';
+    for (let i = 0; i < 5; i++) {
+        const forecast = forecastData.list[i];
+
+        const forecastColumn = document.createElement('div');
+        forecastColumn.classList.add('col', 'bg-primary', 'text-white', 'rounded', 'p-2', 'm-2');
+
+        // const forecastDate = document.createElement('h3');
+        // forecastDate.textcontent = formatDate(forecast.date);
+        // forecastColumn.appendChild(forecastDate);
+
+        // const forecastIcon = document.createElement('img');
+
+
+        const forecastTemp = document.createElement('p');
+        forecastTemp.innerHTML = `<span>Temp:</span> ${convertKelvinToFarenheit(forecast.main.temp)} °F`;
+        forecastColumn.appendChild(forecastTemp);
+
+        const forecastWind = document.createElement('p');
+        forecastWind.innerHTML = `<span>Wind:</span> ${convertMetersPerSecondToMPH(forecast.wind.speed)} MPH`;
+        forecastColumn.appendChild(forecastWind);
+
+        const forecastHumidity = document.createElement('p');
+        forecastHumidity.innerHTML = `<span>Humidity:</span> ${forecast.main.humidity} %`;
+        forecastColumn.appendChild(forecastHumidity);
+
+        forecastColumns.appendChild(forecastColumn);
+
+        
+    }
+}
 
 
 
@@ -71,6 +108,7 @@ function handleSearchFormSubmit(event) {
 
     if (userSearch) {
         fetchWeatherData(userSearch);
+        fetchForecastData(userSearch);
     }
 }
 
