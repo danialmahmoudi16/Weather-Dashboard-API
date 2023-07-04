@@ -1,9 +1,7 @@
 .nav {
-    background-image: linear-gradient(to right,#ff1493,#8b008b);
+    background-image: linear-gradient(to right, #ff1493, #8b008b);
     color: aliceblue;
 }
-
-
 
 .container {
     display: flex;
@@ -28,7 +26,7 @@
     flex-wrap: wrap;
 }
 
-#five-day-forecast-columns  .col {
+#five-day-forecast-columns .col {
     flex-basis: calc(20% - 20px);
     margin-right: 20px;
 }
@@ -41,7 +39,7 @@
     margin-right: 0;
 }
 
-.forecast-date{
+.forecast-date {
     font-size: 20px;
     font-weight: bold;
 }
@@ -53,4 +51,3 @@
 .current-weather-box {
     border: 5px solid #060506;
 }
-

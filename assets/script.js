@@ -96,6 +96,7 @@ function displayFiveDayForecast(forecastData) {
     }
 }
 
+// Function to display search history
 function displaySearchHistory(history) {
     searchHistory.innerHTML = '';
     for (let i = history.length - 1; i >= 0; i--) {
@@ -133,6 +134,7 @@ function handleSearchFormSubmit(event) {
     }
 }
 
+// function to load search history from local storage
 function loadSearchHistory() {
     const storedSearchHistory = JSON.parse(localStorage.getItem('searchHistory'));
     if (storedSearchHistory) {
@@ -154,17 +156,20 @@ function convertMetersPerSecondToMPH(metersPerSecond) {
     return Math.round(metersPerSecond * 2.237);
 }
 
+// Format date
 function formatDate(date) {
     const dateTypes = { weekday: "short", month: "short", day: "numeric" };
     return new Date(date).toLocaleDateString("en-US", dateTypes);
 }
 
+// Current date
 function currentDate() {
     const currentDate = new Date();
     const dateTypes = { weekday: "short", month: "short", day: "numeric" };
     return new Date().toLocaleDateString("en-US", dateTypes);
 }
 
+// Current weather icon
 function currentWeatherIcon(weatherData) {
     const icon = document.createElement('img');
     const iconUrl = 'https://openweathermap.org/img/w/' + weatherData.weather[0].icon + '.png';
@@ -172,4 +177,5 @@ function currentWeatherIcon(weatherData) {
     return icon;
 }
 
+// Event listeners
 searchBtn.addEventListener('click', handleSearchFormSubmit);
