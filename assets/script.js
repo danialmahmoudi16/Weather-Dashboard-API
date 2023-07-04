@@ -31,7 +31,7 @@ function fetchWeatherData(city) {
 
 // Fetches 5 day forecast data from OpenWeather API
 function fetchForecastData(city) {
-    const forecastApiUrl = 'https://api.openweathermap.org/data/2.5/forecast?q='+city+'&appid=a2986e392fb8f98a746af14b93d91f5a';
+    const forecastApiUrl = 'https://api.openweathermap.org/data/2.5/forecast?q=' + city + '&appid=a2986e392fb8f98a746af14b93d91f5a';
     fetch(forecastApiUrl)
         .then(function (futureResponse) {
             if (!futureResponse.ok) {
@@ -49,13 +49,11 @@ function fetchForecastData(city) {
 }
 
 
-
-
-
 // Display current weather data
 function displayCurrentWeather(weatherData) {
 
-    currentWeather.textContent = weatherData.name;
+    currentWeather.textContent = weatherData.name + currentDate();
+    currentWeather.appendChild(currentWeatherIcon(weatherData));
     currentTemp.textContent = 'Temp:' + convertKelvinToFarenheit(weatherData.main.temp) + ' °F ';
     currentWind.textContent = 'Wind:' + convertMetersPerSecondToMPH(weatherData.wind.speed) + ' MPH ';
     currentHumidity.textContent = 'Humidity:' + weatherData.main.humidity + ' % ';
@@ -66,18 +64,20 @@ function displayCurrentWeather(weatherData) {
 function displayFiveDayForecast(forecastData) {
     console.log(forecastData);
     forecastColumns.innerHTML = '';
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 40; i += 8) {
         const forecast = forecastData.list[i];
 
         const forecastColumn = document.createElement('div');
         forecastColumn.classList.add('col', 'bg-primary', 'text-white', 'rounded', 'p-2', 'm-2');
 
-        // const forecastDate = document.createElement('h3');
-        // forecastDate.textcontent = formatDate(forecast.date);
-        // forecastColumn.appendChild(forecastDate);
+        const forecastDate = document.createElement('h3');
+        forecastDate.textContent = formatDate(forecast.dt_txt);
+        forecastColumn.appendChild(forecastDate);
 
-        // const forecastIcon = document.createElement('img');
-
+        const forecastIcon = document.createElement('img');
+        const iconUrl = 'https://openweathermap.org/img/w/' + forecast.weather[0].icon + '.png';
+        forecastIcon.setAttribute('src', iconUrl);
+        forecastColumn.appendChild(forecastIcon);
 
         const forecastTemp = document.createElement('p');
         forecastTemp.innerHTML = `<span>Temp:</span> ${convertKelvinToFarenheit(forecast.main.temp)} °F`;
@@ -92,12 +92,8 @@ function displayFiveDayForecast(forecastData) {
         forecastColumn.appendChild(forecastHumidity);
 
         forecastColumns.appendChild(forecastColumn);
-
-        
     }
 }
-
-
 
 
 // Handle search form submit
@@ -122,5 +118,22 @@ function convertMetersPerSecondToMPH(metersPerSecond) {
     return Math.round(metersPerSecond * 2.237);
 }
 
+function formatDate(date) {
+    const dateTypes = { weekday: "short", month: "short", day: "numeric" };
+    return new Date(date).toLocaleDateString("en-US", dateTypes);
+}
+
+function currentDate() {
+    const currentDate = new Date();
+    const dateTypes = { weekday: "short", month: "short", day: "numeric" };
+    return new Date().toLocaleDateString("en-US", dateTypes);
+}
+
+function currentWeatherIcon(weatherData) {
+    const icon = document.createElement('img');
+    const iconUrl = 'https://openweathermap.org/img/w/' + weatherData.weather[0].icon + '.png';
+    icon.setAttribute('src', iconUrl);
+    return icon;
+}
 
 searchBtn.addEventListener('click', handleSearchFormSubmit);
