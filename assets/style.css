@@ -1,0 +1,15 @@
+.nav {
+    background-image: linear-gradient(to right,#ff1493,#8b008b);
+    color: aliceblue;
+}
+
+
+
+.container {
+    display: flex;
+    margin: 40px;
+}
+
+.column2 {
+    margin-left: 20%;
+}
