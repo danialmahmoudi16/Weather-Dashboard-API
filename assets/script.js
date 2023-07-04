@@ -1,5 +1,5 @@
 const apiKey = 'a2986e392fb8f98a746af14b93d91f5a';
-
+const searchHistoryArray = [];
 
 const cityInput = document.getElementById('city-input');
 const searchBtn = document.getElementById('search-btn');
@@ -9,7 +9,7 @@ const currentTemp = document.getElementById('current-temp');
 const currentWind = document.getElementById('current-wind');
 const currentHumidity = document.getElementById('current-humidity');
 const fiveDayForecast = document.getElementById('five-day-forecast');
-const forecastColumns = document.getElementById('5-day-forecast-columns');
+const forecastColumns = document.getElementById('five-day-forecast-columns');
 
 // Fetches current weather data from OpenWeather API`
 function fetchWeatherData(city) {
@@ -68,10 +68,11 @@ function displayFiveDayForecast(forecastData) {
         const forecast = forecastData.list[i];
 
         const forecastColumn = document.createElement('div');
-        forecastColumn.classList.add('col', 'bg-primary', 'text-white', 'rounded', 'p-2', 'm-2');
+        forecastColumn.classList.add('col', 'forecast-card', 'text-white', 'rounded', 'p-3', 'm-2');
 
         const forecastDate = document.createElement('h3');
         forecastDate.textContent = formatDate(forecast.dt_txt);
+        forecastDate.classList.add('forecast-date');
         forecastColumn.appendChild(forecastDate);
 
         const forecastIcon = document.createElement('img');
@@ -95,6 +96,21 @@ function displayFiveDayForecast(forecastData) {
     }
 }
 
+function displaySearchHistory(history) {
+    searchHistory.innerHTML = '';
+    for (let i = history.length - 1; i >= 0; i--) {
+        const historyItem = document.createElement('li');
+        historyItem.classList.add('list-group-item', 'bg-secondary', 'text-white', 'rounded', 'p-2', 'm-2');
+        historyItem.textContent = history[i];
+        historyItem.addEventListener('click', function () {
+            fetchWeatherData(history[i]);
+            fetchForecastData(history[i]);
+        });
+        searchHistory.appendChild(historyItem);
+    }
+}
+
+
 
 // Handle search form submit
 function handleSearchFormSubmit(event) {
@@ -105,8 +121,28 @@ function handleSearchFormSubmit(event) {
     if (userSearch) {
         fetchWeatherData(userSearch);
         fetchForecastData(userSearch);
+
+        searchHistoryArray.push(userSearch);
+        if (searchHistoryArray.length > 5) {
+            searchHistoryArray.shift();
+        }
+
+        localStorage.setItem('searchHistory', JSON.stringify(searchHistoryArray));
+
+        displaySearchHistory(searchHistoryArray);
     }
 }
+
+function loadSearchHistory() {
+    const storedSearchHistory = JSON.parse(localStorage.getItem('searchHistory'));
+    if (storedSearchHistory) {
+        searchHistoryArray = JSON.parse(storedSearchHistory);
+        displaySearchHistory(searchHistoryArray);
+    }
+}
+
+window.addEventListener('load', loadSearchHistory);
+
 
 // Convert Kelvin to Farenheit
 function convertKelvinToFarenheit(kelvin) {

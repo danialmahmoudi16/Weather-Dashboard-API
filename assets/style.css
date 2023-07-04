@@ -13,3 +13,44 @@
 .column2 {
     margin-left: 20%;
 }
+
+.search-input {
+    display: flex;
+    align-items: center;
+}
+
+.search-input input {
+    margin-right: 10px
+}
+
+#five-day-forecast-columns {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#five-day-forecast-columns  .col {
+    flex-basis: calc(20% - 20px);
+    margin-right: 20px;
+}
+
+#five-day-forecast-columns .col:nth-child(5) {
+    flex-basis: calc(20% - 20px);
+}
+
+#five-day-forecast-columns .col:last-child {
+    margin-right: 0;
+}
+
+.forecast-date{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.forecast-card {
+    background-color: darkorchid;
+}
+
+.current-weather-box {
+    border: 5px solid #060506;
+}
+
